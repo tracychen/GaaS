@@ -1,5 +1,29 @@
-import { getLogs } from "@/utils/quicknode-client";
+// import { getLogs } from "@/utils/quicknode-client.js";
 import keccak256 from "keccak256";
+
+import { BigNumber, providers, utils } from "ethers";
+
+const provider = new providers.JsonRpcProvider(
+  "https://fragrant-maximum-morning.discover.quiknode.pro/d0622d4d9d620911c27303a0b6f5e3dbee0a41c5/"
+);
+
+export const getLogs = async (
+  topic: string, // only supports one topic for now
+  contractAddress: string,
+  walletAddress: string,
+  fromBlock: number, // i.e. 123456
+  toBlock: number,  // i.e. 123456
+) => {
+  const topicHex = keccak256(topic).toString("hex");
+  const logs = await provider.getLogs({
+    address: contractAddress,
+    fromBlock: BigNumber.from(fromBlock).toHexString() || "latest",
+    toBlock: BigNumber.from(toBlock).toHexString() || "latest",
+    topics: [`0x${topicHex}`, walletAddress],
+  });
+  console.log(logs);
+  return logs;
+};
 
 // function to get the logs of a wallet address and check if any of them are aave staking events
 // aave staking event emitted looks like this: Staked (index_topic_1 address from, index_topic_2 address onBehalfOf, uint256 amount)
@@ -12,13 +36,18 @@ export const getAaveStakingEvents = async (walletAddress: string) => {
   const toBlock = 17044918;
   console.log(`topic: ${keccak256(topic).toString("hex")}`);
 
-  await getLogs(
+  const logs = await getLogs(
     topic,
     contractAddress,
     walletAddress,
     fromBlock,
     toBlock,
   );
+
+  for (const log of logs) {
+    console.log(`\n=== new log ===`);
+    console.log(`amount staked: ${utils.formatEther(BigNumber.from(log.data).toString())} ETH`)
+  }
 }
 
 (async () => {
