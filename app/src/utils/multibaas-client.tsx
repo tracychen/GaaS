@@ -48,3 +48,46 @@ export const executeEventQuery = async (queryName: string) => {
   return data;
 };
 
+export const upsertEventQuery = async (
+  eventName = "Transfer(address,address,uint256)",
+  contractAddress: string
+) => {
+  const eventQuery = "TestTransferEventQuery";
+  const url = `${baseUrl}/api/v0/queries/${eventQuery}`;
+  const resp = await fetch(url, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.MULTIBAAS_API_KEY}`,
+    },
+    body: JSON.stringify({
+      events: [
+        {
+          eventName: eventName,
+          select: [
+            {
+              alias: "account",
+              type: "input",
+              name: "from",
+              inputIndex: 0,
+            },
+          ],
+          filter: {
+            rule: "And",
+            children: [
+              {
+                operator: "Equal",
+                value: contractAddress,
+                fieldType: "contract_address",
+              },
+            ],
+          },
+        },
+      ],
+    }),
+  });
+
+  const data = await resp.json();
+  console.log(data);
+  return data;
+};
