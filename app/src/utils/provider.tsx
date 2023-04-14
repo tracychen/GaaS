@@ -17,6 +17,5 @@ export function getJsonRpcProvider(chain: string): providers.JsonRpcProvider {
 
 export function getGaaSContract(chain: string) {
   const signer = getJsonRpcSigner(chain);
-  console.log(contractAddresses);
   return GaaS__factory.connect((contractAddresses as any)[chain], signer);
 }

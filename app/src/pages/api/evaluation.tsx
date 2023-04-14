@@ -18,7 +18,7 @@ export default async function handler(
     // Submit evaluation result on-chain
     const { gateId, address } = req.body as RequestBody;
     if (!gateId || !address) {
-      throw Error("'gateId' and 'address' are required in request body");
+      return res.status(400).json({error: "'gateId' and 'address' are required in request body"})
     }
     const gateStruct = await gaasContract.getGate(gateId);
     const config = Buffer.from(gateStruct.configHash, "base64").toString(
@@ -40,10 +40,10 @@ export default async function handler(
     const iface = new utils.Interface(abi);
     const logDescriptions = receipt.logs.map((log) => iface.parseLog(log));
     if (logDescriptions.length === 0) {
-      throw new Error("No 'EvaluationCompleted' event emitted");
+      return res.status(500).json({ error: "No 'EvaluationCompleted' event emitted" });
     }
-    res.status(201);
+    return res.status(201);
   } else {
-    throw Error("Only POST and GET requests are supported");
+    return res.status(405).json({ error: "Only POST requests are supported" })
   }
 }
