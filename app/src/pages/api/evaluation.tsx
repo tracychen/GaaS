@@ -44,6 +44,6 @@ export default async function handler(
     }
     res.status(201);
   } else {
-    throw Error("Only POST requests are supported");
+    throw Error("Only POST and GET requests are supported");
   }
 }
