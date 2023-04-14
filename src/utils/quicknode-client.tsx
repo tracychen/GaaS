@@ -31,7 +31,7 @@ export const getLogs = async (
 ) => {
   const topicHex = keccak256(topic).toString("hex");
   const logs = await provider.getLogs({
-    address: "0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f",
+    address: address,
     fromBlock,
     topics: [`0x${topicHex}`],
   });
