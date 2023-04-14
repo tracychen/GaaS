@@ -27,8 +27,8 @@ export const getWalletTokenTransactions = async (
 export const getLogs = async (
   topic: string, // only supports one topic for now
   address: string,
-  fromBlock: number,
-  toBlock: number,
+  fromBlock: string,
+  toBlock: string, 
 ) => {
   const topicHex = keccak256(topic).toString("hex");
   const logs = await provider.getLogs({
