@@ -13,14 +13,25 @@ export default async function handler(
     // Get gate by gateId
     const { gateId } = req.query;
     if (!gateId || typeof gateId !== "string") {
-      throw Error("'gateId' are required in request body and must be string");
+      return res
+        .status(400)
+        .json({ error: "'gateId' must be a positive integer" });
     }
-    const gateStruct = await gaasContract.getGate(gateId);
+    if (!Number.isInteger(Number(gateId))) {
+      return res
+        .status(400)
+        .json({ error: "'gateId' must be a positive integer" });
+    }
+    const gaasContract = getGaaSContract("mumbai");
+    const gateStruct = await gaasContract.gates(gateId);
+    if (!gateStruct.configHash) {
+      return res.status(404).json({ error: "Gate not found" });
+    }
     const gateString = Buffer.from(gateStruct.configHash, "base64").toString(
       "binary"
     );
     const gate = JSON.parse(gateString) as Gate;
-    res.status(200).json({ date: gate });
+    return res.status(200).json({ data: gate });
   } else {
     throw Error("Only GET requests are supported");
   }
