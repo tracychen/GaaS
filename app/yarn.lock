@@ -501,6 +501,9 @@
   dependencies:
     client-only "^0.0.1"
 
+"@gaas/protocol@file:../protocol/dist":
+  version "0.0.0"
+
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.11.8.tgz#03595ac2075a4dc0f191cc2131de14fbd7d410b9"

@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@gaas/protocol": "*",
+    "@gaas/protocol": "file:../protocol/dist",
     "@headlessui/react": "^1.7.14",
     "@next/bundle-analyzer": "^13.3.0",
     "@next/font": "^13.3.0",
