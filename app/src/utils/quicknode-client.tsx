@@ -31,13 +31,19 @@ export const getLogs = async (
   fromBlock: number, // i.e. 123456
   toBlock: number,  // i.e. 123456
 ) => {
+  console.log("getting logs..")
   const topicHex = keccak256(topic).toString("hex");
+  console.log(`topicHex: ${topicHex}`);
+  console.log(`contractAddress: ${contractAddress}`);
+  console.log(`walletAddress: ${walletAddress}`);
+  console.log(`fromBlock: ${fromBlock}`);
+  console.log(`toBlock: ${toBlock}`);
   const logs = await provider.getLogs({
     address: contractAddress,
     fromBlock: BigNumber.from(fromBlock).toHexString() || "latest",
     toBlock: BigNumber.from(toBlock).toHexString() || "latest",
     topics: [`0x${topicHex}`, walletAddress],
   });
-  console.log(logs);
+  console.log(`fetchedLogs: ${logs}`);
   return logs;
 };
