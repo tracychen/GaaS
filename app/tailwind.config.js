@@ -23,6 +23,8 @@ module.exports = {
         twitter: "#1D9BF0",
         telegram: "#38B0E3",
         error: "#EB5757",
+        'deform-orange': "#FFBC4F",
+        'deform-red': "#FF8181",
       },
       backgroundImage: {
         rainbow:

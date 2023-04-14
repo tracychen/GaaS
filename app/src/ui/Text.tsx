@@ -14,12 +14,12 @@ const textStyles = cva([], {
   variants: {
     variant: {
       bold: "text-body text-primary font-bold",
-      semibold: "text-body text-primary font-semibold",
+      semibold: "text-body text-primary font-semibold text-[30px]",
       large: "text-lg text-primary",
       regular: "text-body text-primary",
-      small: "text-small text-primary",
+      small: "text-small text-primary text-[18px]",
       xsmall: "text-xsmall text-primary",
-      secondary: "text-small text-secondary",
+      secondary: "text-small text-secondary text-[16px]",
       placeholder: "text-small text-placeholder",
       error: "text-small text-error",
     },
