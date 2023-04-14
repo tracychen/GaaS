@@ -1,11 +1,28 @@
-// import { getLogs } from "@/utils/quicknode-client.js";
-import keccak256 from "keccak256";
-
 import { BigNumber, providers, utils } from "ethers";
+import keccak256 from "keccak256";
 
 const provider = new providers.JsonRpcProvider(
   "https://fragrant-maximum-morning.discover.quiknode.pro/d0622d4d9d620911c27303a0b6f5e3dbee0a41c5/"
 );
+
+export const getWalletTokenTransactions = async (
+  address: string,
+  contract: string,
+  page = 1,
+  perPage = 10
+) => {
+  console.log(provider);
+  const heads = await provider.send("qn_getWalletTokenTransactions", [
+    {
+      address,
+      contract,
+      page,
+      perPage,
+    },
+  ]);
+  console.log(heads);
+  return heads;
+};
 
 export const getLogs = async (
   topic: string, // only supports one topic for now
@@ -24,6 +41,7 @@ export const getLogs = async (
   console.log(logs);
   return logs;
 };
+
 
 // function to get the logs of a wallet address and check if any of them are aave staking events
 // aave staking event emitted looks like this: Staked (index_topic_1 address from, index_topic_2 address onBehalfOf, uint256 amount)
