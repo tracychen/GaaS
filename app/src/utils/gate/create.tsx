@@ -1,6 +1,8 @@
+import { Gate } from "@/types/gate";
+
 export interface CreateGateInputs {
-  gate: any;
-  abi: any;
+  gate: Gate;
+  abi: string;
 }
 
 export const createGate = async (
