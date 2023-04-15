@@ -1,4 +1,4 @@
-import { verifyWalletMessage } from "@/app/page";
+import { verifyWalletMessage } from "@/utils/provider";
 import WalletConnectButton from "@/components/wallet/WalletConnectButton";
 import { useWalletState } from "@/components/wallet/useWalletState";
 import { Button } from "@/ui/Button";
@@ -59,7 +59,7 @@ const WalletConnectAndVerify = ({
           onClick={async () => {
             if (address) {
               const response = await signMessageAsync({
-                message: verifyWalletMessage(),
+                message: verifyWalletMessage(address),
               });
               if (onSignatureSuccess) {
                 onSignatureSuccess(address, response);
@@ -67,7 +67,7 @@ const WalletConnectAndVerify = ({
             }
           }}
           isLoading={isLoading}
-          icon={signature ? "checkCircle" : ""}
+          icon={signature ? "check-circle" : ""}
           disabled={!!signature}
           variant="secondary"
         >

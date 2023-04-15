@@ -20,17 +20,7 @@ import { createGate } from "@/utils/gate/create";
 import { Transition } from "@headlessui/react";
 import { useMemo, useState } from "react";
 import { useSignMessage } from "wagmi";
-
-export const verifyWalletMessage = (address: string) => {
-  return `Welcome to GaaS ⛩️!
-
-Sign this message to verify ownership of your wallet address.
-
-This request will not trigger a blockchain transaction or cost any gas fees.
-
-Your address: <WALLET_ADDRESS>
-  `.replace("<WALLET_ADDRESS>", address);
-};
+import { verifyWalletMessage } from "@/utils/provider";
 
 const INTERACTIONS_ARRAY = [
   {
@@ -501,7 +491,7 @@ const Home = () => {
                   className={
                     "h-16 rounded-lg border border-tertiary/20 px-5 text-small placeholder:text-placeholder focus:border-primary focus:outline-none w-full mt-[5px]"
                   }
-                  placeholder={"deposit"}
+                  placeholder={"deposited"}
                   type={"text"}
                   onChange={(e) => {
                     setReturnKey(e.target.value);

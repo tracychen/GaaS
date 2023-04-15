@@ -34,7 +34,6 @@ export const sendNotificationGateCreated = async (
         img: "",
       },
       channel: "eip155:5:0xC4a88E54fBe997B5714F91022324952c3679baA5", // your channel address
-      env: "staging",
     });
   } catch (err) {
     console.error("Error: ", err);
@@ -68,7 +67,6 @@ export const sendNotificationEvaluationComplete = async (
         img: "",
       },
       channel: "eip155:5:0xC4a88E54fBe997B5714F91022324952c3679baA5", // your channel address
-      env: "staging",
     });
   } catch (err) {
     console.error("Error: ", err);
