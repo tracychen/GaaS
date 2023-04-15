@@ -13,6 +13,7 @@ import CheckCircleSolidIcon from "@/ui/icons/CheckCircleSolidIcon";
 import { EthereumIcon } from "@/ui/icons/EthereumIcon";
 import { OptimismIcon } from "@/ui/icons/OptimismIcon";
 import { PolygonIcon } from "@/ui/icons/PolygonIcon";
+import { ButtonOrLink } from "@/ui/utils/ButtonOrLink";
 import { parseEvents } from "@/utils/events/abiParser";
 import { createGate } from "@/utils/gate/create";
 import { Transition } from "@headlessui/react";
@@ -20,7 +21,7 @@ import { useMemo, useState } from "react";
 import { useSignMessage } from "wagmi";
 
 export const verifyWalletMessage = (address: string) => {
-  return `Welcome to GaaS!
+  return `Welcome to GaaS ⛩️!
 
 Sign this message to verify ownership of your wallet address.
 
@@ -105,33 +106,10 @@ export interface Event {
   index: number;
   icon?: JSX.Element;
 }
-// data
-// {
-//   "data": {
-//       "gateType": "EVENTS_EMITTED",                                      // selectedGate.type
-//       "contractAddress": "0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9",   // contractAddress
-//       "chainId": 1,                                                      // selectedChain.chainId
-//       "gateConfiguration": {
-//           "evaluationPeriod": 5,                                         // evaluationPeriod
-//           "period": "hour",                                              // selectedPeriod
-//           "event": "Deposit",                                            // selectedEvent.name
-//           "addressArgument": {
-//               "argumentName": "user",                                    // selectedEvent.field
-//               "indexed": 0                                               // selectedEvent.index
-//           },
-//           "requiredCount": 1                                             // requiredCount
-//       }
-//   }
-// }
 
 const Home = () => {
   const { isConnected, address, notConnected } = useWalletState();
-  const {
-    data: signature,
-    signMessageAsync,
-    isLoading,
-    reset,
-  } = useSignMessage();
+  const { data: signature, signMessageAsync, isLoading } = useSignMessage();
   const [signatureValue, setSignatureValue] = useState();
   const [selectedGate, setSelectedGate] = useState(INTERACTIONS_ARRAY[0]);
   const [selectedChain, setSelectedChain] = useState(NETWORK_ARRAY[0]);
@@ -144,6 +122,8 @@ const Home = () => {
   const [selectedEvent, setSelectedEvent] = useState<Event>();
   const [gateName, setGateName] = useState("");
   const [isCreatingGate, setIsCreatingGate] = useState(false);
+  const [createdGateId, setCreatedGateId] = useState(0);
+  const [showCreatedGate, setShowCreatedGate] = useState(false);
 
   const showVerifyButton = useMemo(() => {
     return isConnected && !signature && !signatureValue;
@@ -365,10 +345,10 @@ const Home = () => {
               <div className="flex justify-end mt-[12px] mb-[12px]">
                 <Button
                   isLoading={isCreatingGate}
-                  onClick={() => {
+                  onClick={async () => {
                     setIsCreatingGate(true);
                     console.log("hi");
-                    createGate(
+                    const gateId = await createGate(
                       {
                         gate: {
                           gateName: gateName,
@@ -396,6 +376,8 @@ const Home = () => {
                       },
                       setIsCreatingGate
                     );
+                    setCreatedGateId(gateId);
+                    setShowCreatedGate(true);
                   }}
                 >
                   Confirm
@@ -476,6 +458,19 @@ const Home = () => {
     );
   };
 
+  const CreatedGate = () => {
+    return (
+      <div className={"rounded-brand bg-white p-8 sm:w-[500px]"}>
+        <div className="mb-2 -mt-4 text-center text-[140px]">⛩️</div>
+        <div className="mb-6 flex flex-col gap-y-4 text-center">
+          <ButtonOrLink href={`/gate/${createdGateId}`}>
+            New gate created at: {`/gate/${createdGateId}`}
+          </ButtonOrLink>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       <div className="bg-gradient-to-r from-deform-orange to-deform-red h-[2000px] bg-cover">
@@ -483,7 +478,8 @@ const Home = () => {
           <div className="flex min-h-full items-center justify-center p-4">
             <div className="flex flex-wrap items-center justify-center">
               {!isSignatureVerified && <HomePage />}
-              {isSignatureVerified && <AddNewGate />}
+              {isSignatureVerified && !showCreatedGate && <AddNewGate />}
+              {showCreatedGate && <CreatedGate />}
             </div>
           </div>
         </div>

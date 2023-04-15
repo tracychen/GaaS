@@ -15,6 +15,9 @@ export const createGate = async (
     body: JSON.stringify(objectWithData),
   });
   console.log("response: ");
-  console.log(resp.json());
+  const parsedResp = await resp.json();
+  console.log(parsedResp);
+  console.log(`gateId: ${parsedResp.gateId}`);
   callback(false);
+  return parsedResp.gateId;
 };
