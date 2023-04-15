@@ -3,6 +3,7 @@ import Toast from "@/ui/Toast";
 import WalletProvider from "@/components/wallet/WalletProvider";
 import "@/styles/globals.css";
 import { Work_Sans } from "@next/font/google";
+import { GlobalModal } from "@/components/modal/GlobalModal";
 
 const workSans = Work_Sans({
   weight: "variable",
@@ -20,7 +21,9 @@ export default function RootLayout({
       <head />
       <body>
         <WalletProvider>
-          <Main>{children}</Main>
+          <GlobalModal>
+            <Main>{children}</Main>
+          </GlobalModal>
         </WalletProvider>
         <Toast />
       </body>

@@ -24,6 +24,7 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.14",
     "dotenv": "^16.0.3"
   }
 }
