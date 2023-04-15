@@ -2,7 +2,7 @@
   "name": "@gaas/protocol",
   "main": "index.ts",
   "scripts": {
-    "build": "TS_NODE_TRANSPILE_ONLY=1 hardhat compile && hardhat typechain && tsc"
+    "build": "TS_NODE_TRANSPILE_ONLY=1 yarn hardhat compile && yarn hardhat typechain && tsc"
   },
   "version": "1.0.0",
   "devDependencies": {
