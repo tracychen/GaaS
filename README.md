@@ -10,15 +10,15 @@ The pain points:
 
 "We want to send digital rewards our top community members, as defined as people who trade, claim, and sell every 28 days. Right now this is all done through a giant spreadsheet with manual calculation, lots of spam and bad data.”
 
-- DAO governance lead, $420M market cap, series C exchange
+- DAO governance lead, Major Exchange
 
 “We want to validate certain on-chain actions performed by community members for our marketing campaigns (e.g. made a deposit, made a withdrawal, etc.). This is done by hand right now and it takes up a lot of time and human error.”
 
-- Head of Community, Seed stage trading platform, $3.2M in funding
+- Head of Community, Trading platform
 
 "We don’t just care about our holders. Half of our community includes stakers and we don’t want to exclude them from participating in our community activities."
 
-- Head of Developer Relations, Payments network platform, $165M market cap
+- Head of Developer Relations, Payments network platform
 
 💀 STOP SLAVING OVER SPREADSHEETS, QUERIES, AND ENDLESS MANUAL VERIFICATIONS OF ON-CHAIN TRANSACTIONS
 
