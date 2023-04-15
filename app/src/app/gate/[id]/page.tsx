@@ -2,7 +2,6 @@
 
 import { useGlobalModalContext } from "@/components/modal/GlobalModalContext";
 import { ModalType } from "@/components/modal/types";
-import { Button } from "@/ui/Button";
 import { useEffect } from "react";
 
 const Gate = ({ params }: { params: { id: string } }) => {
@@ -12,7 +11,9 @@ const Gate = ({ params }: { params: { id: string } }) => {
       gateId: params.id,
     });
   }, []);
-  return <div></div>;
+  return (
+    <div className="bg-gradient-to-r from-deform-orange to-deform-red h-[2000px] bg-cover"></div>
+  );
 };
 
 export default Gate;

@@ -22,8 +22,6 @@ const Modal = ({ isOpen, onClose, children }: Props) => {
         // attribute here manually in order for the Rainbow CSS to apply.
         data-rk
       >
-        <div className="fixed inset-0 bg-[#00000099]" aria-hidden="true" />
-
         <div className="fixed inset-0 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4">
             <Dialog.Panel>{children}</Dialog.Panel>
