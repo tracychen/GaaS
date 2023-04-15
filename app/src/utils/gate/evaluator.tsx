@@ -3,6 +3,7 @@ import {
   Gate,
   GateType,
   Period,
+  ReadContractInfoGateConfiguration,
 } from "@/types/gate";
 import { ethers, providers } from "ethers";
 import { getJsonRpcProvider } from "../provider";
@@ -22,16 +23,74 @@ function getProvider(chainId: number) {
   return getJsonRpcProvider(chainName);
 }
 
-export async function evaluateGate(
-  gate: Gate,
-  address: string
-): Promise<boolean> {
+export async function evaluateGate(gate: Gate, address: string) {
   if (!address || !ethers.utils.isAddress(address)) {
     throw new Error(`Address ${address} is not a valid address`);
   }
 
   const provider = getProvider(gate.chainId);
 
+  if (gate.gateType === GateType.EVENTS_EMITTED) {
+    return evaluateEventsEmittedGate(gate, address, provider);
+  } else if (gate.gateType === GateType.READ_CONTRACT_INFO) {
+    return evaluateReadContractInfoGate(gate, address, provider);
+  } else {
+    throw new Error(`Gate type ${gate.gateType} not supported`);
+  }
+}
+
+async function evaluateReadContractInfoGate(
+  gate: Gate,
+  address: string,
+  provider: providers.JsonRpcProvider
+) {
+  if (gate.gateType !== GateType.READ_CONTRACT_INFO) {
+    throw new Error(`Gate type ${gate.gateType} not supported`);
+  }
+  const gateConfiguration =
+    gate.gateConfiguration as ReadContractInfoGateConfiguration;
+
+  // TODO: get this from somewhere kei throws it
+  const abi = [
+    "function getApeCoinStake(address _address) public view returns ((uint256 poolId, uint256 tokenId, uint256 deposited, uint256 unclaimed, uint256 rewards24hr, (uint256 mainTokenId, uint256 mainTypePoolId) pair) memory)",
+  ];
+  const contract = new ethers.Contract(gate.contractAddress, abi, provider);
+  console.log({ contract });
+  const callResult = await contract[gateConfiguration.method](address);
+  let value = callResult;
+  if (gateConfiguration.resultKey) {
+    value = callResult[gateConfiguration.resultKey];
+  }
+  if (value._isBigNumber) {
+    // TODO: handle other types, assume 18 decimals for now
+    value = ethers.utils.formatEther(value);
+  }
+
+  const operator = gateConfiguration.comparison.operator;
+  const comparisonValue = gateConfiguration.comparison.value;
+  switch (operator) {
+    case ">":
+      return value > comparisonValue;
+    case ">=":
+      return value >= comparisonValue;
+    case "<":
+      return value < comparisonValue;
+    case "<=":
+      return value <= comparisonValue;
+    case "==":
+      return value === comparisonValue;
+    case "!=":
+      return value !== comparisonValue;
+    default:
+      throw new Error(`Operator ${operator} not supported`);
+  }
+}
+
+async function evaluateEventsEmittedGate(
+  gate: Gate,
+  address: string,
+  provider: providers.JsonRpcProvider
+): Promise<boolean> {
   if (gate.gateType !== GateType.EVENTS_EMITTED) {
     throw new Error(`Gate type ${gate.gateType} not supported`);
   }

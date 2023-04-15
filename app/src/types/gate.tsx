@@ -48,7 +48,9 @@ export interface Gate {
    * The configuration for the gate based on the gate type
    * Currently only supports "EVENTS_EMITTED"
    */
-  gateConfiguration: EventsEmittedGateConfiguration;
+  gateConfiguration:
+    | EventsEmittedGateConfiguration
+    | ReadContractInfoGateConfiguration;
   /**
    * The type of gate (e.g. "EVENTS_EMITTED")
    */
@@ -69,7 +71,7 @@ export interface EventsEmittedGateConfiguration {
   /**
    * List of criteria to check against
    */
-  criteria: Criteria[];
+  criteria?: Criteria[];
 
   /**
    * Number of periods to evaluate
@@ -85,6 +87,34 @@ export interface EventsEmittedGateConfiguration {
   requiredCount: number;
 }
 
+export interface ReadContractInfoGateConfiguration {
+  /**
+   * Method to call
+   */
+  method: string;
+  /**
+   * Comparison to make against the result of the method call, for now
+   * only supports a single comparison
+   */
+  comparison: Comparison;
+  /**
+   * If provided, get the value associated with this key from
+   * the result of the method call
+   */
+  resultKey?: string;
+}
+
 export enum GateType {
+  /**
+   * Check if there are events emitted from a contract that pertain
+   * to the address being evaluated (e.g. there are > 50 transfers
+   * to/from the address)
+   */
   EVENTS_EMITTED = "EVENTS_EMITTED",
+  /**
+   * Check that the results from calling a read-only contract method
+   * for the address being evaluated match criteria (e.g. total staked
+   * by address > 50)
+   */
+  READ_CONTRACT_INFO = "READ_CONTRACT_INFO",
 }
