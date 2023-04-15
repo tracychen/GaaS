@@ -1,6 +1,5 @@
 import { Gate } from "@/types/gate";
 import { getGaaSContract } from "@/utils/provider";
-import { utils } from "ethers";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const gaasContract = getGaaSContract("mumbai");
@@ -25,6 +24,7 @@ export default async function handler(
       "binary"
     );
     const gate = JSON.parse(config) as Gate;
+
     // TODO: evaluate and supply evaluation result hash using gate
     const evaluationHash = "random";
     const tx = await gaasContract.completeEvaluation(

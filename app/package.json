@@ -25,6 +25,7 @@
     "encoding": "^0.1.13",
     "eslint": "8.38.0",
     "eslint-config-next": "13.3.0",
+    "ethereum-block-by-date": "^1.4.6",
     "ethers": "^5.4.0",
     "keccak256": "^1.0.6",
     "next": "13.3.0",
