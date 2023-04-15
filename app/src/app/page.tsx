@@ -12,6 +12,7 @@ import CheckCircleSolidIcon from "@/ui/icons/CheckCircleSolidIcon";
 import { EthereumIcon } from "@/ui/icons/EthereumIcon";
 import { OptimismIcon } from "@/ui/icons/OptimismIcon";
 import { PolygonIcon } from "@/ui/icons/PolygonIcon";
+import { parseEvents } from "@/utils/events/abiParser";
 import { Transition } from "@headlessui/react";
 import clsx from "clsx";
 import { useMemo, useState } from "react";
@@ -83,6 +84,12 @@ const NETWORK_ARRAY = [
   },
 ];
 
+export interface Event {
+  name: string;
+  field: string;
+  icon?: JSX.Element;
+}
+
 const Home = () => {
   const { isConnected, address, notConnected } = useWalletState();
   const {
@@ -95,6 +102,9 @@ const Home = () => {
   const [selectedGate, setSelectedGate] = useState(INTERACTIONS_ARRAY[0]);
   const [selectedChain, setSelectedChain] = useState(NETWORK_ARRAY[0]);
   const [contractAddress, setContractAddress] = useState("");
+  const [contractABI, setContractABI] = useState("");
+  const [eventOptions, setEventOptions] = useState<Event[]>([]);
+  const [selectedEvent, setSelectedEvent] = useState<Event>();
 
   const showVerifyButton = useMemo(() => {
     return isConnected && !signature && !signatureValue;
@@ -113,7 +123,7 @@ const Home = () => {
         <div className={"rounded-brand bg-white p-8 sm:w-[500px]"}>
           <div className="mb-6 flex flex-col gap-y-4 justify-left">
             <Text variant={"regular"} weight={"bold"}>
-              ⛩️ Add a new Gate
+              ⛩️ Add a new gate
             </Text>
           </div>
           <div className="flex min-h-[48px] flex-wrap justify-left gap-5">
@@ -151,20 +161,84 @@ const Home = () => {
                 <Text variant={"regular"} weight={"bold"}>
                   Contract interaction configuration
                 </Text>
-                <Text variant={"small"} weight={"bold"}>
-                  Please specify details of the required contract interaction.
+                <div className="mt-[10px]">
+                  <Text variant={"small"} color={"tertiary"}>
+                    Please specify details of the required contract interaction.
+                  </Text>
+                </div>
+                <div className="pt-[10px] pb-[10px]">
+                  <Text variant={"small"}>Contract chain</Text>
+                  <Dropdown
+                    items={NETWORK_ARRAY.map((i) => {
+                      return {
+                        label: i.label,
+                        icon: i.icon,
+                        onClick: () => {
+                          setSelectedChain(i);
+                          toast(selectedChain.label);
+                        },
+                      };
+                    })}
+                  >
+                    <div className="mt-[5px]">
+                      <PopoverButton
+                        selectedItem={{
+                          label: selectedChain.label,
+                          icon: selectedChain.icon,
+                        }}
+                        height={"64px"}
+                      />
+                    </div>
+                  </Dropdown>
+                </div>
+              </div>
+              <div className="pt-[10px] pb-[10px]">
+                <Text variant={"small"}>Contract address</Text>
+                <Input
+                  className={
+                    "h-16 rounded-lg border border-tertiary/20 px-5 text-small placeholder:text-placeholder focus:border-primary focus:outline-none w-full mt-[5px]"
+                  }
+                  placeholder={"Paste contract address"}
+                  type={"text"}
+                  onChange={(e) => setContractAddress(e.target.value)}
+                  value={contractAddress}
+                />
+              </div>
+              <div className="pt-[10px] pb-[10px]">
+                <Text variant={"small"}>
+                  Upload Application Binary Interface (ABI)
                 </Text>
-                <Text variant={"small"} weight={"bold"}>
-                  Contract chain
+                <Text variant={"small"} color={"tertiary"}>
+                  To check for custom functions and events
                 </Text>
+                <Input
+                  className={
+                    "h-16 rounded-lg border border-tertiary/20 px-5 text-small placeholder:text-placeholder focus:border-primary focus:outline-none w-full mt-[5px]"
+                  }
+                  placeholder={"Paste contract address"}
+                  type={"text"}
+                  onChange={(e) => {
+                    setContractABI(e.target.value);
+                    console.log("ABI: ", e.target.value);
+                    parseEvents(e.target.value);
+                    // TODO: setEventOptions();
+                  }}
+                  value={contractABI}
+                />
+              </div>
+              <div className="pt-[10px] pb-[10px]">
+                <Text variant={"small"}>Interactions to check for</Text>
                 <Dropdown
-                  items={NETWORK_ARRAY.map((i) => {
+                  items={eventOptions.map((eventOption) => {
                     return {
-                      label: i.label,
-                      icon: i.icon,
+                      label: eventOption.name,
+                      icon: eventOption.icon,
                       onClick: () => {
-                        setSelectedChain(i);
-                        toast(selectedChain.label);
+                        setSelectedEvent({
+                          name: eventOption.name,
+                          field: eventOption.field,
+                        });
+                        toast(selectedEvent!.name + " " + selectedEvent!.field);
                       },
                     };
                   })}
@@ -179,22 +253,6 @@ const Home = () => {
                     />
                   </div>
                 </Dropdown>
-              </div>
-              <div>
-                <Text variant={"small"} weight={"bold"}>
-                  Contract address
-                </Text>
-                <Input
-                  className={clsx(
-                    "h-16 rounded-lg border border-tertiary/20 px-5 text-small placeholder:text-placeholder focus:border-primary focus:outline-none",
-                    "w-full",
-                    "h-16"
-                  )}
-                  placeholder={"Paste contract address"}
-                  type={"text"}
-                  onChange={(e) => setContractAddress(e.target.value)}
-                  value={contractAddress}
-                />
               </div>
               <div className="relative flex py-5 items-center">
                 <div className="flex-grow border-t border-gray-400"></div>

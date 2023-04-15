@@ -16,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html className={workSans.className}>
+    <html>
       <head />
       <body>
         <WalletProvider>
