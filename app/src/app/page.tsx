@@ -5,6 +5,7 @@ import { useWalletState } from "@/components/wallet/useWalletState";
 import { periods } from "@/types/gate";
 import { Button } from "@/ui/Button";
 import { Dropdown } from "@/ui/Dropdown";
+import { Heading } from "@/ui/Heading";
 import { Input } from "@/ui/Input";
 import { PopoverButton } from "@/ui/QuestionPopover";
 import { Text } from "@/ui/Text";
@@ -141,9 +142,9 @@ const Home = () => {
       <>
         <div className={"rounded-brand bg-white p-8 sm:w-[868px]"}>
           <div className="mb-6 flex flex-col gap-y-4 justify-left">
-            <Text variant={"regular"} weight={"bold"}>
+            <Heading variant={"heading1"} weight={"semibold"} color={"primary"}>
               ⛩️ Add a new gate
-            </Text>
+            </Heading>
           </div>
           <div className="flex min-h-[48px] flex-wrap justify-left flex-col gap-5">
             <Text variant={"small"} weight={"bold"}>
@@ -253,7 +254,7 @@ const Home = () => {
                 <Dropdown
                   items={eventOptions.map((eventOption) => {
                     return {
-                      label: `${eventOption.type}: ${eventOption.name} -> ${eventOption.field} (topic index: ${eventOption.index})`,
+                      label: `${eventOption.type}: ${eventOption.name} -> ${eventOption.field} (arg index: ${eventOption.index})`,
                       icon: eventOption.icon,
                       onClick: () => {
                         setSelectedEvent(eventOption);
