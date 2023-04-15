@@ -22,12 +22,15 @@ export const parseEvents = (abiJSON: string): Event[] => {
 
   const eventOptions = [];
   for (const event of events) {
-    for (const inputField of event.inputs) {
+    // for (const inputField of event.inputs) {
+    for (let i = 0; i < event.inputs.length; i++) {
+      const inputField = event.inputs[i];
       if (inputField.type === "address") {
         eventOptions.push({
           name: event.name,
           field: inputField.name,
           type: event.type,
+          index: i,
         });
       }
     }

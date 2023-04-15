@@ -22,8 +22,8 @@ export const verifyWalletMessage = () => {
   return "GaaS";
 };
 export enum GATE_TYPE {
-  INTERACTION = "interaction",
-  STAKING = "staking",
+  INTERACTION = "EVENTS_EMITTED",
+  STAKING = "READ_CONTRACT_INFO",
 }
 
 const INTERACTIONS_ARRAY = [
@@ -42,41 +42,49 @@ const INTERACTIONS_ARRAY = [
 const NETWORK_ARRAY = [
   {
     network: "eth-mainnet",
+    chainId: 1,
     label: "Ethereum Mainnet",
     icon: <EthereumIcon />,
   },
   {
     network: "eth-goerli",
+    chainId: 5,
     label: "Ethereum Goerli",
     icon: <EthereumIcon />,
   },
   {
     network: "opt-mainnet",
+    chainId: 10,
     label: "Optimism",
     icon: <OptimismIcon />,
   },
   {
     network: "opt-goerli",
+    chainId: 420,
     label: "Optimism Goerli",
     icon: <OptimismIcon />,
   },
   {
     network: "arb-mainnet",
+    chainId: 42161,
     label: "Arbitrum",
     icon: <ArbitrumIcon />,
   },
   {
     network: "arb-goerli",
+    chainId: 421613,
     label: "Arbitrum Goerli",
     icon: <ArbitrumIcon />,
   },
   {
     network: "polygon-mainnet",
+    chainId: 137,
     label: "Polygon",
     icon: <PolygonIcon />,
   },
   {
     network: "polygon-mumbai",
+    chainId: 80001,
     label: "Polygon Mumbai",
     icon: <PolygonIcon />,
   },
@@ -86,8 +94,27 @@ export interface Event {
   name: string;
   field: string;
   type: "event" | "function";
+  index: number;
   icon?: JSX.Element;
 }
+// data
+// {
+//   "data": {
+//       "gateType": "EVENTS_EMITTED",
+//       "contractAddress": "0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9",
+//       "chainId": 1,
+//       "gateConfiguration": {
+//           "evaluationPeriod": 5,           // evaluationPeriod
+//           "period": "hour",                // selectedPeriod
+//           "event": "Deposit",              // selectedEvent.name
+//           "addressArgument": {
+//               "argumentName": "user",      // selectedEvent.field
+//               "indexed": 0                 // selectedEvent.index
+//           },
+//           "requiredCount": 1               // requiredCount
+//       }
+//   }
+// }
 
 const Home = () => {
   const { isConnected, address, notConnected } = useWalletState();
@@ -237,7 +264,7 @@ const Home = () => {
                 <Dropdown
                   items={eventOptions.map((eventOption) => {
                     return {
-                      label: `${eventOption.type}: ${eventOption.name} -> ${eventOption.field}`,
+                      label: `${eventOption.type}: ${eventOption.name} -> ${eventOption.field} (topic index: ${eventOption.index})`,
                       icon: eventOption.icon,
                       onClick: () => {
                         setSelectedEvent(eventOption);
@@ -344,7 +371,7 @@ const Home = () => {
   };
 
   const WalletConnect = () => (
-    <div className="flex min-h-[48px] flex-wrap items-center gap-5">
+    <div className="flex min-h-[48px] flex-wrap items-center justify-center gap-5">
       <WalletConnectButton />
       <Transition
         show={showVerifyButton}
@@ -419,7 +446,6 @@ const Home = () => {
             <div className="flex flex-wrap items-center justify-center">
               {!isSignatureVerified && <HomePage />}
               {isSignatureVerified && <AddNewGate />}
-              {/* {<AddNewGate />} */}
             </div>
           </div>
         </div>
