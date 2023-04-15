@@ -54,16 +54,16 @@ export interface Gate {
   period: Period;
   /**
    * The configuration for the gate based on the gate type
-   * Currently only supports "CONTRACT_INTERACTION"
+   * Currently only supports "EVENTS_EMITTED"
    */
-  gateConfiguration: ContractInteractionGateConfiguration;
+  gateConfiguration: EventsEmittedGateConfiguration;
   /**
-   * The type of gate (e.g. "CONTRACT_INTERACTION")
+   * The type of gate (e.g. "EVENTS_EMITTED")
    */
   gateType: GateType;
 }
 
-export interface ContractInteractionGateConfiguration {
+export interface EventsEmittedGateConfiguration {
   /**
    * Events to check for
    */
@@ -80,11 +80,11 @@ export interface ContractInteractionGateConfiguration {
   criteria: Criteria[];
 
   /**
-   * The number of interactions required to pass the gate
+   * The number of matching events required to pass the gate
    */
-  requiredInteractions: number;
+  requiredCount: number;
 }
 
 export enum GateType {
-  CONTRACT_INTERACTION = "CONTRACT_INTERACTION",
+  EVENTS_EMITTED = "EVENTS_EMITTED",
 }

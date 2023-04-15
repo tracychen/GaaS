@@ -1,5 +1,5 @@
 import {
-  ContractInteractionGateConfiguration,
+  EventsEmittedGateConfiguration,
   Gate,
   GateType,
   Period,
@@ -32,11 +32,11 @@ export async function evaluateGate(
 
   const provider = getProvider(gate.chainId);
 
-  if (gate.gateType !== GateType.CONTRACT_INTERACTION) {
+  if (gate.gateType !== GateType.EVENTS_EMITTED) {
     throw new Error(`Gate type ${gate.gateType} not supported`);
   }
   const gateConfiguration =
-    gate.gateConfiguration as ContractInteractionGateConfiguration;
+    gate.gateConfiguration as EventsEmittedGateConfiguration;
 
   const matchingLogs = [];
 
@@ -80,7 +80,7 @@ export async function evaluateGate(
     }
     // Check if number of matching logs is greater than or equal to required interactions
     // TODO aggregate by tx
-    if (matchingLogs.length >= gateConfiguration.requiredInteractions) {
+    if (matchingLogs.length >= gateConfiguration.requiredCount) {
       return true;
     }
     if (fromBlock === endBlock) {
