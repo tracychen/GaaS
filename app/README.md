@@ -1,38 +1,46 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Gate any app with arbitrary on-chain activity!
 
-## Getting Started
+https://ethglobal.com/showcase/gaas-exadm
 
-First, run the development server:
+# Token-gating is sooo 2022.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+Token-gating only captures holders and alienates the rest of the market. Stakers, sellers, buyers, swappers, flippers, and more -- sometimes you want to query for users who are the most ACTIVE on-chain, rather than the biggest WHALES.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The pain points:
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+"We want to send digital rewards our top community members, as defined as people who trade, claim, and sell every 28 days. Right now this is all done through a giant spreadsheet with manual calculation, lots of spam and bad data.”
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+- DAO governance lead, $420M market cap, series C exchange
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+“We want to validate certain on-chain actions performed by community members for our marketing campaigns (e.g. made a deposit, made a withdrawal, etc.). This is done by hand right now and it takes up a lot of time and human error.”
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- Head of Community, Seed stage trading platform, $3.2M in funding
 
-## Learn More
+"We don’t just care about our holders. Half of our community includes stakers and we don’t want to exclude them from participating in our community activities."
 
-To learn more about Next.js, take a look at the following resources:
+- Head of Developer Relations, Payments network platform, $165M market cap
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+💀 STOP SLAVING OVER SPREADSHEETS, QUERIES, AND ENDLESS MANUAL VERIFICATIONS OF ON-CHAIN TRANSACTIONS
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Introducing GaaS (Gating-as-a-service). With GaaS, you can gate any app with arbitrary on-chain activity.
 
-## Deploy on Vercel
+1. Create a gate that makes your application or content exclusive to power users. For example, traders on Aave who frequently trade on the DeFi platform.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. Create a gate that makes your application or content exclusive to stakers. For example, users who have staked their ApeCoin ($APE) for a minimum duration of 1 month.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+3. Users are then required to meet these on-chain requirements before they can access your website.
+
+# How it's made
+
+Our hackathon demo project showcases how GaaS can be used to gate some sample content using arbitrary on-chain events and transactions.
+
+Polygon, Scroll:
+We used Polygon and Scroll to store gating configuration data on-chain in a trustless and low-gas manner so that anyone can audit the access gating requirements and build on top of them.
+
+Polygon Mumbai contract deployment: https://mumbai.polygonscan.com/address/0xCd4F914Ef4FF4DFb445BA046ecEC00FA266E5F51
+
+Scroll Alpha contract deployment:
+https://blockscout.scroll.io/address/0xCd4F914Ef4FF4DFb445BA046ecEC00FA266E5F51
+
+ApeCoin:
+We showcase examples of unique and useful access gating based on Staking activity on ApeCoin as well as other arbitrary contract events such as Deposits, Transfers, and more.
