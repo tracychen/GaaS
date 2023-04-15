@@ -4,5 +4,8 @@
   "private": true,
   "repository": "https://github.com/tracychen/GaaS.git",
   "author": "Tracy <8510537+tracychen@users.noreply.github.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "react-tiny-popover": "^7.2.4"
+  }
 }
