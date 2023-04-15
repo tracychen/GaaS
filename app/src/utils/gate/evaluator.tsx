@@ -11,6 +11,7 @@ import { getJsonRpcProvider } from "../provider";
 import EthDater from "ethereum-block-by-date";
 import { getLogs } from "../quicknode-client";
 import { CHAIN_CONFIGS } from "../env";
+import { queryABIFromDB } from "../planetscale";
 
 function getProvider(chainId: number) {
   const chainName = Object.keys(CHAIN_CONFIGS).find(
@@ -23,23 +24,29 @@ function getProvider(chainId: number) {
   return getJsonRpcProvider(chainName);
 }
 
-export async function evaluateGate(gate: Gate, address: string) {
+export async function evaluateGate(
+  gateId: number,
+  gate: Gate,
+  address: string
+) {
   if (!address || !ethers.utils.isAddress(address)) {
     throw new Error(`Address ${address} is not a valid address`);
   }
 
   const provider = getProvider(gate.chainId);
+  const abi = await queryABIFromDB(gateId);
 
   if (gate.gateType === GateType.EVENTS_EMITTED) {
-    return evaluateEventsEmittedGate(gate, address, provider);
+    return evaluateEventsEmittedGate(abi, gate, address, provider);
   } else if (gate.gateType === GateType.READ_CONTRACT_INFO) {
-    return evaluateReadContractInfoGate(gate, address, provider);
+    return evaluateReadContractInfoGate(abi, gate, address, provider);
   } else {
     throw new Error(`Gate type ${gate.gateType} not supported`);
   }
 }
 
 async function evaluateReadContractInfoGate(
+  abi: any,
   gate: Gate,
   address: string,
   provider: providers.JsonRpcProvider
@@ -50,10 +57,6 @@ async function evaluateReadContractInfoGate(
   const gateConfiguration =
     gate.gateConfiguration as ReadContractInfoGateConfiguration;
 
-  // TODO: get this from somewhere kei throws it
-  const abi = [
-    "function getApeCoinStake(address _address) public view returns ((uint256 poolId, uint256 tokenId, uint256 deposited, uint256 unclaimed, uint256 rewards24hr, (uint256 mainTokenId, uint256 mainTypePoolId) pair) memory)",
-  ];
   const contract = new ethers.Contract(gate.contractAddress, abi, provider);
   console.log({ contract });
   const callResult = await contract[gateConfiguration.method](address);
@@ -87,6 +90,7 @@ async function evaluateReadContractInfoGate(
 }
 
 async function evaluateEventsEmittedGate(
+  abi: any,
   gate: Gate,
   address: string,
   provider: providers.JsonRpcProvider
@@ -98,11 +102,6 @@ async function evaluateEventsEmittedGate(
     gate.gateConfiguration as EventsEmittedGateConfiguration;
 
   const matchingLogs = [];
-
-  // TODO: get this from somewhere kei throws it
-  const abi = [
-    "event Deposit (address indexed user, uint256 amount, address recipient)",
-  ];
 
   const iface = new ethers.utils.Interface(abi);
   const eventHexString = iface.getEventTopic(gateConfiguration.event);

@@ -12,7 +12,7 @@ export interface EvaluationResult {
 }
 
 type RequestBody = {
-  gateId: string;
+  gateId: number;
   address: string;
 };
 
@@ -33,7 +33,7 @@ export default async function handler(
       "binary"
     );
     const gate = JSON.parse(config) as Gate;
-    const passed = await evaluateGate(gate, address);
+    const passed = await evaluateGate(gateId, gate, address);
     const evaluationResult: EvaluationResult = {
       gateId: Number(gateId),
       timestamp: Date.now(),
