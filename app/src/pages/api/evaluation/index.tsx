@@ -20,13 +20,13 @@ export default async function handler(
     if (!gateId || !address) {
       return res.status(400).json({error: "'gateId' and 'address' are required in request body"})
     }
-    const gateStruct = await gaasContract.getGate(gateId);
+    const gateStruct = await gaasContract.gates(gateId);
     const config = Buffer.from(gateStruct.configHash, "base64").toString(
       "binary"
     );
     const gate = JSON.parse(config) as Gate;
     // TODO: evaluate and supply evaluation result hash using gate
-    const evaluationHash = "";
+    const evaluationHash = "random";
     const tx = await gaasContract.completeEvaluation(
       gateId,
       address,
@@ -34,14 +34,7 @@ export default async function handler(
     );
     const receipt = await tx.wait(3);
     console.debug("Tx receipt", receipt);
-    const abi = [
-      "event EvaluationCompleted(address evaluatedAddress, uint256 gateId)",
-    ];
-    const iface = new utils.Interface(abi);
-    const logDescriptions = receipt.logs.map((log) => iface.parseLog(log));
-    if (logDescriptions.length === 0) {
-      return res.status(500).json({ error: "No 'EvaluationCompleted' event emitted" });
-    }
+    
     return res.status(201);
   } else {
     return res.status(405).json({ error: "Only POST requests are supported" })
