@@ -1,5 +1,4 @@
 import { Gate } from "@/types/gate";
-import { queryABIFromDB } from "@/utils/planetscale";
 import { getGaaSContract } from "@/utils/provider";
 import { NextApiRequest, NextApiResponse } from "next";
 

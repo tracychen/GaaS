@@ -116,6 +116,7 @@ async function evaluateEventsEmittedGate(
     gateConfiguration.evaluationPeriod,
     provider
   );
+
   const currentBlock = await provider.getBlockNumber();
   let toBlock = currentBlock;
   let fromBlock = Math.max(toBlock - 10000, endBlock);
@@ -124,7 +125,8 @@ async function evaluateEventsEmittedGate(
       topics,
       gate.contractAddress,
       fromBlock,
-      toBlock
+      toBlock,
+      provider
     );
 
     for (const log of logs) {

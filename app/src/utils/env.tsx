@@ -19,6 +19,11 @@ export const CHAIN_CONFIGS: { [key: string]: ChainConfig } = {
     rpcURL: process?.env?.SCROLL_ALPHA_NETWORK_RPC_URL!, // eslint-disable-line
     privateKey: process?.env?.PRIVATE_KEY!, // eslint-disable-line
   },
+  goerli: {
+    // The Goerli test net
+    chainID: 5,
+    rpcURL: process?.env?.GOERLI_NETWORK_RPC_URL!, // eslint-disable-line
+  },
   mumbai: {
     // The Polygon Mumbai test net
     chainID: 80001,

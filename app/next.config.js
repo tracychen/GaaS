@@ -23,5 +23,7 @@ module.exports = withBundleAnalyzer({
     MUMBAI_NETWORK_RPC_URL: process.env.MUMBAI_NETWORK_RPC_URL,
     PRIVATE_KEY: process.env.PRIVATE_KEY,
     MAINNET_NETWORK_RPC_URL: process.env.MAINNET_NETWORK_RPC_URL,
+    PUSH_PRIVATE_KEY: process.env.PUSH_PRIVATE_KEY,
+    GOERLI_NETWORK_RPC_URL: process.env.GOERLI_NETWORK_RPC_URL,
   },
 });

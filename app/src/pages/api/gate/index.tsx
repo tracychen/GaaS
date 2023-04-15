@@ -3,6 +3,7 @@ import { insertABIIntoDB } from "@/utils/planetscale";
 import { getGaaSContract } from "@/utils/provider";
 import { BigNumber, ethers } from "ethers";
 import { NextApiRequest, NextApiResponse } from "next";
+import { sendNotificationGateCreated } from "@/utils/push-client";
 
 // TODO: allow switching between mumbai/scrollalpha
 const gaasContract = getGaaSContract("mumbai");
@@ -47,6 +48,7 @@ export default async function handler(
 
     // dump ABI into DB for later querying
     await insertABIIntoDB(gateId, abi);
+    await sendNotificationGateCreated(gateId, gate);
 
     return res.status(201).json({ gateId: gateId });
   } else {

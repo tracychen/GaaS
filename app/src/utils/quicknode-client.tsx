@@ -1,32 +1,11 @@
-import { BigNumber } from "ethers";
-import { getJsonRpcProvider } from "./provider";
-
-const provider = getJsonRpcProvider("mainnet");
-
-export const getWalletTokenTransactions = async (
-  address: string,
-  contract: string,
-  page = 1,
-  perPage = 10
-) => {
-  console.log(provider);
-  const heads = await provider.send("qn_getWalletTokenTransactions", [
-    {
-      address,
-      contract,
-      page,
-      perPage,
-    },
-  ]);
-  console.log(heads);
-  return heads;
-};
+import { BigNumber, providers } from "ethers";
 
 export const getLogs = async (
   topics: string[], // only supports one topic for now
   contractAddress: string,
   fromBlock: number, // i.e. 123456
-  toBlock: number // i.e. 123456
+  toBlock: number, // i.e. 123456
+  provider: providers.JsonRpcProvider
 ) => {
   const params = {
     address: contractAddress,
