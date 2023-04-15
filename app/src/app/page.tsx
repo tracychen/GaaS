@@ -120,13 +120,13 @@ const Home = () => {
   const AddNewGate = () => {
     return (
       <>
-        <div className={"rounded-brand bg-white p-8 sm:w-[500px]"}>
+        <div className={"rounded-brand bg-white p-8 sm:w-[868px]"}>
           <div className="mb-6 flex flex-col gap-y-4 justify-left">
             <Text variant={"regular"} weight={"bold"}>
               ⛩️ Add a new gate
             </Text>
           </div>
-          <div className="flex min-h-[48px] flex-wrap justify-left gap-5">
+          <div className="flex min-h-[48px] flex-wrap justify-left flex-col gap-5">
             <Text variant={"small"} weight={"bold"}>
               How would you like to gate your content?
             </Text>
@@ -205,12 +205,16 @@ const Home = () => {
                 />
               </div>
               <div className="pt-[10px] pb-[10px]">
-                <Text variant={"small"}>
-                  Upload Application Binary Interface (ABI)
-                </Text>
-                <Text variant={"small"} color={"tertiary"}>
-                  To check for custom functions and events
-                </Text>
+                <div className="pt-[10px]">
+                  <Text variant={"small"}>
+                    Upload Application Binary Interface (ABI)
+                  </Text>
+                </div>
+                <div className="pt-[10px] pb-[10px]">
+                  <Text variant={"small"} color={"tertiary"}>
+                    To check for custom functions and events
+                  </Text>
+                </div>
                 <Input
                   className={
                     "h-16 rounded-lg border border-tertiary/20 px-5 text-small placeholder:text-placeholder focus:border-primary focus:outline-none w-full mt-[5px]"
@@ -220,7 +224,9 @@ const Home = () => {
                   onChange={(e) => {
                     setContractABI(e.target.value);
                     console.log("ABI: ", e.target.value);
-                    parseEvents(e.target.value);
+                    const parsed = parseEvents(e.target.value);
+                    console.log(parsed);
+                    setEventOptions(parsed);
                     // TODO: setEventOptions();
                   }}
                   value={contractABI}
@@ -231,7 +237,7 @@ const Home = () => {
                 <Dropdown
                   items={eventOptions.map((eventOption) => {
                     return {
-                      label: eventOption.name,
+                      label: eventOption.name + " " + eventOption.field,
                       icon: eventOption.icon,
                       onClick: () => {
                         setSelectedEvent({
@@ -246,8 +252,9 @@ const Home = () => {
                   <div className="mt-[5px]">
                     <PopoverButton
                       selectedItem={{
-                        label: selectedChain.label,
-                        icon: selectedChain.icon,
+                        label: selectedEvent
+                          ? selectedEvent!.name + " " + selectedEvent!.field
+                          : "Select Event Option",
                       }}
                       height={"64px"}
                     />
@@ -338,9 +345,9 @@ const Home = () => {
         <div className="fixed inset-0 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4">
             <div className="flex flex-wrap items-center justify-center">
-              {!isSignatureVerified && <HomePage />}
-              {isSignatureVerified && <AddNewGate />}
-              {/* {<AddNewGate />} */}
+              {/* {!isSignatureVerified && <HomePage />}
+              {isSignatureVerified && <AddNewGate />} */}
+              {<AddNewGate />}
             </div>
           </div>
         </div>

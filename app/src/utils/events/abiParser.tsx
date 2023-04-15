@@ -13,15 +13,24 @@ import { Event } from "@/app/page";
 //     icon?: JSX.Element;
 //   }
 
-export const parseEvents = (abiJSON: string): Event => {
+export const parseEvents = (abiJSON: string): Event[] => {
   const abi = JSON.parse(abiJSON);
-  const events = abi.filter((event: any) => event.type === "event");
+  const events = abi.filter(
+    (event: any) => event.type === "event" || event.type === "function"
+  );
   console.log(events);
-  return events.map((event: any) => {
-    for (const input of event.inputs) {
+
+  const eventOptions = [];
+  for (const event of events) {
+    for (const inputField of event.inputs) {
+      if (inputField.type === "address") {
+        eventOptions.push({
+          name: event.name,
+          field: inputField.name,
+        });
+      }
     }
-    return {
-      name: event.name,
-    };
-  });
+  }
+
+  return eventOptions;
 };
