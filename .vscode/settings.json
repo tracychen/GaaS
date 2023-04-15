@@ -1,5 +1,26 @@
 {
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "[markdown]": {
+    "editor.wordWrap": "off"
+  },
+  // Default to be 4, but make JavaScript/JSON be 2
+  "editor.tabSize": 4,
+  "[javascript]": {
+    "editor.tabSize": 2
+  },
+  "[typescript]": {
     "editor.tabSize": 2,
-    "typescript.tsdk": "node_modules/typescript/lib",
-    "typescript.enablePromptUseWorkspaceTsdk": true
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    }
+  },
+  "[json]": {
+    "editor.tabSize": 2
+  },
+  // This one forces the tab to be **space**
+  "editor.insertSpaces": true,
+  "eslint.validate": ["typescript"],
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
 }
