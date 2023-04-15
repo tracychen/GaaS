@@ -9,10 +9,9 @@ import { Heading } from "@/ui/Heading";
 import { Input } from "@/ui/Input";
 import { PopoverButton } from "@/ui/QuestionPopover";
 import { Text } from "@/ui/Text";
-import { ArbitrumIcon } from "@/ui/icons/ArbitrumIcon";
 import CheckCircleSolidIcon from "@/ui/icons/CheckCircleSolidIcon";
 import { EthereumIcon } from "@/ui/icons/EthereumIcon";
-import { OptimismIcon } from "@/ui/icons/OptimismIcon";
+import { ScrollAlphaIcon } from "@/ui/icons/ScrollAlphaIcon";
 import { PolygonIcon } from "@/ui/icons/PolygonIcon";
 import { ButtonOrLink } from "@/ui/utils/ButtonOrLink";
 import { parseEvents } from "@/utils/events/abiParser";
@@ -49,30 +48,6 @@ const NETWORK_ARRAY = [
     icon: <EthereumIcon />,
   },
   {
-    network: "opt-mainnet",
-    chainId: 10,
-    label: "Optimism",
-    icon: <OptimismIcon />,
-  },
-  {
-    network: "opt-goerli",
-    chainId: 420,
-    label: "Optimism Goerli",
-    icon: <OptimismIcon />,
-  },
-  {
-    network: "arb-mainnet",
-    chainId: 42161,
-    label: "Arbitrum",
-    icon: <ArbitrumIcon />,
-  },
-  {
-    network: "arb-goerli",
-    chainId: 421613,
-    label: "Arbitrum Goerli",
-    icon: <ArbitrumIcon />,
-  },
-  {
     network: "polygon-mainnet",
     chainId: 137,
     label: "Polygon",
@@ -83,6 +58,12 @@ const NETWORK_ARRAY = [
     chainId: 80001,
     label: "Polygon Mumbai",
     icon: <PolygonIcon />,
+  },
+  {
+    network: "scroll-alpha",
+    chainId: 534353,
+    label: "Scroll Alpha",
+    icon: <ScrollAlphaIcon />,
   },
 ];
 

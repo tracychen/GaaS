@@ -13,6 +13,11 @@ export const CHAIN_CONFIGS: { [key: string]: ChainConfig } = {
     chainID: 1,
     rpcURL: process?.env?.MAINNET_NETWORK_RPC_URL!, // eslint-disable-line
   },
+  polygon: {
+    // The Polygon main net
+    chainID: 137,
+    rpcURL: process?.env?.POLYGON_NETWORK_RPC_URL!, // eslint-disable-line
+  },
   scrollalpha: {
     // Scroll alpha test net
     chainID: 534353,
