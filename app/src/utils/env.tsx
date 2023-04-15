@@ -8,6 +8,11 @@ interface ChainConfig {
   privateKey?: string;
 }
 export const CHAIN_CONFIGS: { [key: string]: ChainConfig } = {
+  mainnet: {
+    // The Ethereum main net
+    chainID: 1,
+    rpcURL: process?.env?.MAINNET_NETWORK_RPC_URL!, // eslint-disable-line
+  },
   scrollalpha: {
     // Scroll alpha test net
     chainID: 534353,

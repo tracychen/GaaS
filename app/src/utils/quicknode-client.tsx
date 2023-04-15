@@ -1,9 +1,8 @@
 import { BigNumber, providers } from "ethers";
 import keccak256 from "keccak256";
+import { getJsonRpcProvider } from "./provider";
 
-const provider = new providers.JsonRpcProvider(
-  "https://fragrant-maximum-morning.discover.quiknode.pro/d0622d4d9d620911c27303a0b6f5e3dbee0a41c5/"
-);
+const provider = getJsonRpcProvider("mainnet");
 
 export const getWalletTokenTransactions = async (
   address: string,
@@ -29,21 +28,15 @@ export const getLogs = async (
   contractAddress: string,
   walletAddress: string,
   fromBlock: number, // i.e. 123456
-  toBlock: number,  // i.e. 123456
+  toBlock: number // i.e. 123456
 ) => {
-  console.log("getting logs..")
+  console.log("getting logs..");
   const topicHex = keccak256(topic).toString("hex");
-  console.log(`topicHex: ${topicHex}`);
-  console.log(`contractAddress: ${contractAddress}`);
-  console.log(`walletAddress: ${walletAddress}`);
-  console.log(`fromBlock: ${fromBlock}`);
-  console.log(`toBlock: ${toBlock}`);
   const logs = await provider.getLogs({
     address: contractAddress,
     fromBlock: BigNumber.from(fromBlock).toHexString() || "latest",
     toBlock: BigNumber.from(toBlock).toHexString() || "latest",
     topics: [`0x${topicHex}`, walletAddress],
   });
-  console.log(`fetchedLogs: ${logs}`);
   return logs;
 };

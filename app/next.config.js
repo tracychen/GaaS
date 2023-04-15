@@ -22,5 +22,6 @@ module.exports = withBundleAnalyzer({
     SCROLL_ALPHA_NETWORK_RPC_URL: process.env.SCROLL_ALPHA_NETWORK_RPC_URL,
     MUMBAI_NETWORK_RPC_URL: process.env.MUMBAI_NETWORK_RPC_URL,
     PRIVATE_KEY: process.env.PRIVATE_KEY,
+    MAINNET_NETWORK_RPC_URL: process.env.MAINNET_NETWORK_RPC_URL,
   },
 });
