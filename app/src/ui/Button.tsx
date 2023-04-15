@@ -5,7 +5,6 @@ import clsx from "clsx";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { ButtonOrLink, ButtonOrLinkProps } from "./utils/ButtonOrLink";
 
-
 export const opacityHover = "hover:opacity-80 transition-opacity";
 const colorHover = "hover:bg-[#1a1a1a]/[0.05] transition-colors";
 
@@ -41,13 +40,19 @@ const buttonStyles = cva(
       variant: "primary",
       size: "md",
     },
-  },
+  }
 );
 
 export interface ButtonProps
   extends VariantProps<typeof buttonStyles>,
     ButtonOrLinkProps {
-  icon?: "circleArrow" | "wallet" | "download" | "refresh" | "";
+  icon?:
+    | "circleArrow"
+    | "check-circle"
+    | "wallet"
+    | "download"
+    | "refresh"
+    | "";
   isLoading?: boolean;
   loadingLocation?: "left" | "right";
 }
@@ -75,7 +80,7 @@ export function Button({
   const brandPaddingY = `py-[0.5rem]`;
 
   const baseStyle = clsx(
-    (props.disabled || isLoading) && "pointer-events-none opacity-60",
+    (props.disabled || isLoading) && "pointer-events-none opacity-60"
   );
 
   return variant !== "brand" ? (
@@ -83,7 +88,7 @@ export function Button({
       className={clsx(
         buttonStyles({ variant, size }),
         baseStyle,
-        props.className,
+        props.className
       )}
       {...props}
     >
@@ -104,6 +109,16 @@ export function Button({
           </span>
         )}
         {!isLoading && icon === "download" && (
+          <span className="mr-2.5">
+            <img
+              src="/icons/download.svg"
+              height={20}
+              width={20}
+              alt="download"
+            />
+          </span>
+        )}
+        {!isLoading && icon === "check-circle" && (
           <span className="mr-2.5">
             <img
               src="/icons/download.svg"
@@ -146,7 +161,7 @@ export function Button({
       className={clsx(
         buttonStyles({ variant, size }),
         brandBorderSize,
-        baseStyle,
+        baseStyle
       )}
       {...props}
     >
@@ -154,7 +169,7 @@ export function Button({
         className={clsx(
           "rounded-lg bg-white text-black",
           brandPaddingX,
-          brandPaddingY,
+          brandPaddingY
         )}
       >
         {props.children}
