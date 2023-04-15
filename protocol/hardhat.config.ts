@@ -24,6 +24,21 @@ const config: HardhatUserConfig = {
       chainId: 1337,
     },
   },
+  etherscan: {
+    apiKey: {
+      scrollalpha: "abc",
+    },
+    customChains: [
+      {
+        network: "scrollalpha",
+        chainId: 534353,
+        urls: {
+          apiURL: "https://blockscout.scroll.io/api",
+          browserURL: "https://blockscout.scroll.io/",
+        },
+      },
+    ],
+  },
   // etherscan: {},
 };
 
