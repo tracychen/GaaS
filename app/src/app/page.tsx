@@ -14,6 +14,7 @@ import { EthereumIcon } from "@/ui/icons/EthereumIcon";
 import { OptimismIcon } from "@/ui/icons/OptimismIcon";
 import { PolygonIcon } from "@/ui/icons/PolygonIcon";
 import { parseEvents } from "@/utils/events/abiParser";
+import { createGate } from "@/utils/gate/create";
 import { Transition } from "@headlessui/react";
 import { useMemo, useState } from "react";
 import { useSignMessage } from "wagmi";
@@ -100,18 +101,18 @@ export interface Event {
 // data
 // {
 //   "data": {
-//       "gateType": "EVENTS_EMITTED",
-//       "contractAddress": "0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9",
-//       "chainId": 1,
+//       "gateType": "EVENTS_EMITTED",                                      // selectedGate.type
+//       "contractAddress": "0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9",   // contractAddress
+//       "chainId": 1,                                                      // selectedChain.chainId
 //       "gateConfiguration": {
-//           "evaluationPeriod": 5,           // evaluationPeriod
-//           "period": "hour",                // selectedPeriod
-//           "event": "Deposit",              // selectedEvent.name
+//           "evaluationPeriod": 5,                                         // evaluationPeriod
+//           "period": "hour",                                              // selectedPeriod
+//           "event": "Deposit",                                            // selectedEvent.name
 //           "addressArgument": {
-//               "argumentName": "user",      // selectedEvent.field
-//               "indexed": 0                 // selectedEvent.index
+//               "argumentName": "user",                                    // selectedEvent.field
+//               "indexed": 0                                               // selectedEvent.index
 //           },
-//           "requiredCount": 1               // requiredCount
+//           "requiredCount": 1                                             // requiredCount
 //       }
 //   }
 // }
@@ -135,6 +136,7 @@ const Home = () => {
   const [eventOptions, setEventOptions] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event>();
   const [gateName, setGateName] = useState("");
+  const [isCreatingGate, setIsCreatingGate] = useState(false);
 
   const showVerifyButton = useMemo(() => {
     return isConnected && !signature && !signatureValue;
@@ -355,9 +357,37 @@ const Home = () => {
               </div>
               <div className="flex justify-end mt-[12px] mb-[12px]">
                 <Button
-                  isLoading={false}
+                  isLoading={isCreatingGate}
                   onClick={() => {
+                    setIsCreatingGate(true);
                     console.log("hi");
+                    createGate(
+                      {
+                        gate: {
+                          gateType: selectedGate.type,
+                          contractAddress: contractAddress,
+                          chainId: selectedChain.chainId,
+                          gateConfiguration: {
+                            evaluationPeriod: evaluationPeriod,
+                            period: selectedPeriod,
+                            event: selectedEvent
+                              ? selectedEvent.name
+                              : "undefined",
+                            addressArgument: {
+                              argumentName: selectedEvent
+                                ? selectedEvent.field
+                                : "undefined",
+                              indexed: selectedEvent
+                                ? selectedEvent.index
+                                : "undefined",
+                            },
+                            requiredCount: requiredCount,
+                          },
+                        },
+                        abi: contractABI,
+                      },
+                      setIsCreatingGate
+                    );
                   }}
                 >
                   Confirm
