@@ -2,6 +2,7 @@ import { Gate } from "@/types/gate";
 import { evaluateGate } from "@/utils/gate/evaluator";
 import { getGaaSContract } from "@/utils/provider";
 import { NextApiRequest, NextApiResponse } from "next";
+import { sendNotificationEvaluationComplete } from "@/utils/push-client";
 
 const gaasContract = getGaaSContract("mumbai");
 
@@ -50,6 +51,7 @@ export default async function handler(
     );
     const receipt = await tx.wait(3);
     console.debug("Tx receipt", receipt);
+    await sendNotificationEvaluationComplete(address, evaluationResult);
     return res.status(201).json(evaluationResult);
   } else {
     return res.status(405).json({ error: "Only POST requests are supported" });
