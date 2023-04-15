@@ -30,7 +30,7 @@ export const checkboxBaseStyle =
 export const textInputStyle =
   "error:border-error w-full rounded-md border-2 border-border bg-white p-5 text-body text-primary transition-colors duration-150 ease-out placeholder:text-placeholder focus:border-primary focus:outline-none focus:ring-0 disabled:bg-input disabled:opacity-60";
 export const numberInputStyle =
-  "error:border-error w-[160px] rounded-lg border-2 border-border bg-white p-5 text-body text-primary transition-colors duration-150 ease-out placeholder:text-placeholder focus:border-primary focus:outline-none focus:ring-0 disabled:bg-input disabled:opacity-60";
+  "error:border-error h-10 rounded-lg mt-1.5 border border-tertiary/20 px-2.5 text-small placeholder:text-placeholder focus:border-primary focus:outline-none w-[70px]";
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   {
@@ -217,7 +217,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         />
         <div
           data-testid={`${label || props.name}-switch`}
-          className="peer h-6 w-11 rounded-full bg-tertiary after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-gradient-linear-bluegreen peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none"
+          className="peer h-6 w-11 rounded-full bg-tertiary after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-gradient-linear-red peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none"
         ></div>
       </label>
     );

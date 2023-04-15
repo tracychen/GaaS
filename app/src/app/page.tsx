@@ -2,6 +2,7 @@
 
 import WalletConnectButton from "@/components/wallet/WalletConnectButton";
 import { useWalletState } from "@/components/wallet/useWalletState";
+import { periods } from "@/types/gate";
 import { Button } from "@/ui/Button";
 import { Dropdown } from "@/ui/Dropdown";
 import { Input } from "@/ui/Input";
@@ -22,7 +23,6 @@ import { useSignMessage } from "wagmi";
 export const verifyWalletMessage = () => {
   return "GaaS";
 };
-
 export enum GATE_TYPE {
   INTERACTION = "interaction",
   STAKING = "staking",
@@ -101,6 +101,9 @@ const Home = () => {
   const [signatureValue, setSignatureValue] = useState();
   const [selectedGate, setSelectedGate] = useState(INTERACTIONS_ARRAY[0]);
   const [selectedChain, setSelectedChain] = useState(NETWORK_ARRAY[0]);
+  const [selectedPeriod, setSelectedPeriod] = useState("day");
+  const [evaluationPeriod, setEvaluationPeriod] = useState(1);
+  const [requiredCount, setRequiredCount] = useState(1);
   const [contractAddress, setContractAddress] = useState("");
   const [contractABI, setContractABI] = useState("");
   const [eventOptions, setEventOptions] = useState<Event[]>([]);
@@ -257,6 +260,53 @@ const Home = () => {
                           : "Select Event Option",
                       }}
                       height={"64px"}
+                    />
+                  </div>
+                </Dropdown>
+              </div>
+              <div className="flex items-center">
+                <div className="pr-2">
+                  <Text variant={"small"}>
+                    Require users to have interacted at least
+                  </Text>
+                </div>
+                <Input
+                  min={0}
+                  type={"number"}
+                  placeholder="1"
+                  defaultValue={requiredCount}
+                  onChange={(e) => setRequiredCount(parseInt(e.target.value))}
+                />
+                <div className="px-2">
+                  <Text variant={"small"}>time(s) in the past</Text>
+                </div>
+                <div className="pr-2">
+                  <Input
+                    min={0}
+                    type={"number"}
+                    placeholder="1"
+                    defaultValue={evaluationPeriod}
+                    onChange={(e) =>
+                      setEvaluationPeriod(parseInt(e.target.value))
+                    }
+                  />
+                </div>
+                <Dropdown
+                  items={periods.map((period) => {
+                    return {
+                      label: `${period}s`,
+                      onClick: () => {
+                        setSelectedPeriod(period);
+                      },
+                    };
+                  })}
+                >
+                  <div className="mt-[5px]">
+                    <PopoverButton
+                      selectedItem={{
+                        label: `${selectedPeriod}s`,
+                      }}
+                      height={"40px"}
                     />
                   </div>
                 </Dropdown>

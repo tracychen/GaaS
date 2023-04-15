@@ -1,6 +1,8 @@
 export type Operator = "==" | "!=" | ">" | ">=" | "<" | "<=";
 
-export type Period = "hour" | "day" | "week" | "month" | "year";
+export const periods = ["hour", "day", "week", "month", "year"] as const;
+
+export type Period = (typeof periods)[number];
 
 export interface EventArgument {
   /**
