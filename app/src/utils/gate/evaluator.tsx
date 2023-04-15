@@ -1,11 +1,26 @@
-import { Criteria, Gate, Period } from "@/types/gate";
-import { ethers } from "ethers";
+import {
+  ContractInteractionGateConfiguration,
+  Gate,
+  GateType,
+  Period,
+} from "@/types/gate";
+import { ethers, providers } from "ethers";
 import { getJsonRpcProvider } from "../provider";
 
 import EthDater from "ethereum-block-by-date";
 import { getLogs } from "../quicknode-client";
+import { CHAIN_CONFIGS } from "../env";
 
-const provider = getJsonRpcProvider("mainnet");
+function getProvider(chainId: number) {
+  const chainName = Object.keys(CHAIN_CONFIGS).find(
+    (chain) => CHAIN_CONFIGS[chain].chainID === chainId
+  );
+
+  if (!chainName) {
+    throw new Error(`Chain ID ${chainId} not supported`);
+  }
+  return getJsonRpcProvider(chainName);
+}
 
 export async function evaluateGate(
   gate: Gate,
@@ -15,33 +30,68 @@ export async function evaluateGate(
     throw new Error(`Address ${address} is not a valid address`);
   }
 
-  for (const criteria of gate.criteria) {
-    const endBlock = await convertPeriodToBlockRange(criteria);
-    const currentBlock = await provider.getBlockNumber();
-    let fromBlock = currentBlock;
-    let toBlock = Math.max(fromBlock - 10000, endBlock);
-    while (toBlock >= endBlock) {
-      const logs = await getLogs(
-        criteria.event,
-        gate.contractAddress,
-        address,
-        fromBlock,
-        toBlock
-      );
-      // TODO filter and compare
+  const provider = getProvider(gate.chainId);
 
-      if (logs.length > 0) {
-        return true;
+  if (gate.gateType !== GateType.CONTRACT_INTERACTION) {
+    throw new Error(`Gate type ${gate.gateType} not supported`);
+  }
+  const gateConfiguration =
+    gate.gateConfiguration as ContractInteractionGateConfiguration;
+
+  const matchingLogs = [];
+
+  // TODO: get this from somewhere kei throws it
+  const abi = [
+    "event Deposit (address indexed user, uint256 amount, address recipient)",
+  ];
+
+  const iface = new ethers.utils.Interface(abi);
+  const eventHexString = iface.getEventTopic(gateConfiguration.event);
+  let topics = [eventHexString];
+
+  // If address to check is an indexed arg, add it to topics
+  if (gateConfiguration.addressArgument.indexed !== undefined) {
+    topics.push(ethers.utils.hexZeroPad(address, 32));
+  }
+  const endBlock = await convertPeriodToBlockRange(gate, provider);
+  const currentBlock = await provider.getBlockNumber();
+  let toBlock = currentBlock;
+  let fromBlock = Math.max(toBlock - 10000, endBlock);
+  while (fromBlock >= endBlock) {
+    const logs = await getLogs(
+      topics,
+      gate.contractAddress,
+      fromBlock,
+      toBlock
+    );
+
+    for (const log of logs) {
+      const parsedLog = iface.parseLog(log);
+      console.log({ parsedLog });
+      if (
+        // if address matches the specified address argument
+        address.toLowerCase() ===
+        parsedLog.args[
+          gateConfiguration.addressArgument.argumentName
+        ].toLowerCase()
+      ) {
+        matchingLogs.push(log);
       }
-      fromBlock = toBlock - 1;
-      toBlock = Math.max(fromBlock - 10000, endBlock);
     }
+    // Check if number of matching logs is greater than or equal to required interactions
+    // TODO aggregate by tx
+    if (matchingLogs.length >= gateConfiguration.requiredInteractions) {
+      return true;
+    }
+    if (fromBlock === endBlock) {
+      break;
+    }
+    toBlock = fromBlock - 1;
+    fromBlock = Math.max(toBlock - 10000, endBlock);
   }
 
-  return true;
+  return false;
 }
-
-const dater = new EthDater(provider);
 
 function getSecondsFromPeriod(period: Period): number {
   switch (period) {
@@ -65,10 +115,14 @@ function subtractSeconds(date: Date, seconds: number) {
   return date;
 }
 
-async function convertPeriodToBlockRange(criteria: Criteria): Promise<number> {
-  const periodSeconds = getSecondsFromPeriod(criteria.period);
-  const secondsRange = periodSeconds * criteria.evaluationPeriod;
+async function convertPeriodToBlockRange(
+  gate: Gate,
+  provider: providers.JsonRpcProvider
+): Promise<number> {
+  const dater = new EthDater(provider);
+  const periodSeconds = getSecondsFromPeriod(gate.period);
+  const secondsRange = periodSeconds * gate.evaluationPeriod;
   const startDate = subtractSeconds(new Date(), secondsRange);
-  const blockResult = dater.getDate(startDate);
+  const blockResult = await dater.getDate(startDate);
   return blockResult.block;
 }

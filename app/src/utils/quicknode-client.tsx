@@ -1,5 +1,4 @@
-import { BigNumber, providers } from "ethers";
-import keccak256 from "keccak256";
+import { BigNumber } from "ethers";
 import { getJsonRpcProvider } from "./provider";
 
 const provider = getJsonRpcProvider("mainnet");
@@ -24,19 +23,18 @@ export const getWalletTokenTransactions = async (
 };
 
 export const getLogs = async (
-  topic: string, // only supports one topic for now
+  topics: string[], // only supports one topic for now
   contractAddress: string,
-  walletAddress: string,
   fromBlock: number, // i.e. 123456
   toBlock: number // i.e. 123456
 ) => {
-  console.log("getting logs..");
-  const topicHex = keccak256(topic).toString("hex");
-  const logs = await provider.getLogs({
+  const params = {
     address: contractAddress,
     fromBlock: BigNumber.from(fromBlock).toHexString() || "latest",
     toBlock: BigNumber.from(toBlock).toHexString() || "latest",
-    topics: [`0x${topicHex}`, walletAddress],
-  });
+    topics,
+  };
+  console.log("getting logs..", params);
+  const logs = await provider.getLogs(params);
   return logs;
 };
