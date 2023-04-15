@@ -87,6 +87,7 @@ const NETWORK_ARRAY = [
 export interface Event {
   name: string;
   field: string;
+  type: "event" | "function";
   icon?: JSX.Element;
 }
 
@@ -230,7 +231,6 @@ const Home = () => {
                     const parsed = parseEvents(e.target.value);
                     console.log(parsed);
                     setEventOptions(parsed);
-                    // TODO: setEventOptions();
                   }}
                   value={contractABI}
                 />
@@ -240,13 +240,10 @@ const Home = () => {
                 <Dropdown
                   items={eventOptions.map((eventOption) => {
                     return {
-                      label: eventOption.name + " " + eventOption.field,
+                      label: `${eventOption.type}: ${eventOption.name} -> ${eventOption.field}`,
                       icon: eventOption.icon,
                       onClick: () => {
-                        setSelectedEvent({
-                          name: eventOption.name,
-                          field: eventOption.field,
-                        });
+                        setSelectedEvent(eventOption);
                         toast(selectedEvent!.name + " " + selectedEvent!.field);
                       },
                     };

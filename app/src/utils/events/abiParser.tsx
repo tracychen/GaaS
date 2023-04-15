@@ -27,6 +27,7 @@ export const parseEvents = (abiJSON: string): Event[] => {
         eventOptions.push({
           name: event.name,
           field: inputField.name,
+          type: event.type,
         });
       }
     }
