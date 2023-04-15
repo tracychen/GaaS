@@ -50,7 +50,7 @@ export default async function handler(
     );
     const receipt = await tx.wait(3);
     console.debug("Tx receipt", receipt);
-    return res.status(201);
+    return res.status(201).json(evaluationResult);
   } else {
     return res.status(405).json({ error: "Only POST requests are supported" });
   }

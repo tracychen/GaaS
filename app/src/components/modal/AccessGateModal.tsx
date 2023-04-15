@@ -1,3 +1,5 @@
+import { toast } from "react-hot-toast";
+import AccessGateView from "../gate/AccessGateView";
 import { useGlobalModalContext } from "./GlobalModalContext";
 import Modal from "./Modal";
 import type { AccessGateModalProps } from "./types";
@@ -11,7 +13,13 @@ const AccessGateModal = () => {
   return (
     // Do not define onClose here to prevent default closing behavior of the modal
     <Modal isOpen={modalType === ModalType.ACCESS_GATE} onClose={() => {}}>
-      hi {gateId}
+      <AccessGateView
+        gateId={gateId}
+        onGoToNext={() => {
+          toast.success("gate passed!");
+          hideModal();
+        }}
+      />
     </Modal>
   );
 };

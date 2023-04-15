@@ -1,9 +1,17 @@
-const CheckCircleSolidIcon = ({ color = "#7BDB89" }: { color?: string }) => {
+const CheckCircleSolidIcon = ({
+  color = "#7BDB89",
+  width = 20,
+  height = 20,
+}: {
+  color?: string;
+  width?: number;
+  height?: number;
+}) => {
   return (
     <>
       <svg
-        width="20"
-        height="20"
+        width={width}
+        height={height}
         viewBox="0 0 16 16"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
