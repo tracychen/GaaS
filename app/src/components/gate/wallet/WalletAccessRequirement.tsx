@@ -27,9 +27,9 @@ export default function WalletAccessRequirement({
   loading?: boolean;
 }) {
   return (
-    <div className="flex flex-col gap-y-1">
+    <div className="flex flex-col gap-y-2">
       <Heading variant={"heading3"} color={"primary"}>
-        {gateInfo.name}
+        {gateInfo.gateName}
       </Heading>
       <div className="max-w-fit">
         <RequirementState
