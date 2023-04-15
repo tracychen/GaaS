@@ -16,10 +16,6 @@
     "@rainbow-me/rainbowkit": "^0.12.8",
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/line-clamp": "^0.4.4",
-    "@types/node": "18.15.11",
-    "@types/react": "18.0.35",
-    "@types/react-dom": "18.0.11",
-    "autoprefixer": "10.4.14",
     "class-variance-authority": "^0.5.2",
     "clsx": "^1.2.1",
     "encoding": "^0.1.13",
@@ -29,12 +25,19 @@
     "ethers": "^5.4.0",
     "keccak256": "^1.0.6",
     "next": "13.3.0",
-    "postcss": "8.4.21",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.0",
-    "tailwindcss": "^3.3.1",
-    "typescript": "5.0.4",
     "wagmi": "^0.12.10"
+  },
+  "devDependencies": {
+    "@types/ethereum-block-by-date": "^1.4.1",
+    "@types/node": "18.15.11",
+    "@types/react": "18.0.35",
+    "@types/react-dom": "18.0.11",
+    "autoprefixer": "10.4.14",
+    "postcss": "8.4.21",
+    "tailwindcss": "^3.3.1",
+    "typescript": "5.0.4"
   }
 }
