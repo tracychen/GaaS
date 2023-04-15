@@ -15,9 +15,7 @@ import { OptimismIcon } from "@/ui/icons/OptimismIcon";
 import { PolygonIcon } from "@/ui/icons/PolygonIcon";
 import { parseEvents } from "@/utils/events/abiParser";
 import { Transition } from "@headlessui/react";
-import clsx from "clsx";
 import { useMemo, useState } from "react";
-import { toast } from "react-hot-toast";
 import { useSignMessage } from "wagmi";
 
 export const verifyWalletMessage = () => {
@@ -109,6 +107,7 @@ const Home = () => {
   const [contractABI, setContractABI] = useState("");
   const [eventOptions, setEventOptions] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event>();
+  const [gateName, setGateName] = useState("");
 
   const showVerifyButton = useMemo(() => {
     return isConnected && !signature && !signatureValue;
@@ -141,7 +140,6 @@ const Home = () => {
                   icon: i.icon,
                   onClick: () => {
                     setSelectedGate(i);
-                    toast(selectedGate.label);
                   },
                 };
               })}
@@ -179,7 +177,6 @@ const Home = () => {
                         icon: i.icon,
                         onClick: () => {
                           setSelectedChain(i);
-                          toast(selectedChain.label);
                         },
                       };
                     })}
@@ -223,7 +220,7 @@ const Home = () => {
                   className={
                     "h-16 rounded-lg border border-tertiary/20 px-5 text-small placeholder:text-placeholder focus:border-primary focus:outline-none w-full mt-[5px]"
                   }
-                  placeholder={"Paste contract address"}
+                  placeholder={"Paste contract ABI"}
                   type={"text"}
                   onChange={(e) => {
                     setContractABI(e.target.value);
@@ -244,7 +241,6 @@ const Home = () => {
                       icon: eventOption.icon,
                       onClick: () => {
                         setSelectedEvent(eventOption);
-                        toast(selectedEvent!.name + " " + selectedEvent!.field);
                       },
                     };
                   })}
@@ -310,6 +306,35 @@ const Home = () => {
               </div>
               <div className="relative flex py-5 items-center">
                 <div className="flex-grow border-t border-gray-400"></div>
+              </div>
+              <div className="pt-[10px] pb-[10px]">
+                <Text variant={"regular"} weight={"bold"}>
+                  Name your Gate
+                </Text>
+                <div className="mt-[10px]">
+                  <Text variant={"small"} color={"tertiary"}>
+                    Gate name
+                  </Text>
+                </div>
+                <Input
+                  className={
+                    "h-16 rounded-lg border border-tertiary/20 px-5 text-small placeholder:text-placeholder focus:border-primary focus:outline-none w-full mt-[5px]"
+                  }
+                  placeholder={"e.g. ApeCoin Staker"}
+                  type={"text"}
+                  onChange={(e) => setGateName(e.target.value)}
+                  value={gateName}
+                />
+              </div>
+              <div className="flex justify-end mt-[12px] mb-[12px]">
+                <Button
+                  isLoading={false}
+                  onClick={() => {
+                    console.log("hi");
+                  }}
+                >
+                  Confirm
+                </Button>
               </div>
             </>
           )}
@@ -392,9 +417,9 @@ const Home = () => {
         <div className="fixed inset-0 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4">
             <div className="flex flex-wrap items-center justify-center">
-              {/* {!isSignatureVerified && <HomePage />}
-              {isSignatureVerified && <AddNewGate />} */}
-              {<AddNewGate />}
+              {!isSignatureVerified && <HomePage />}
+              {isSignatureVerified && <AddNewGate />}
+              {/* {<AddNewGate />} */}
             </div>
           </div>
         </div>
