@@ -45,14 +45,6 @@ export interface Gate {
    */
   chainId: number;
   /**
-   * Number of periods to evaluate
-   */
-  evaluationPeriod: number;
-  /**
-   * Unit for periods (e.g. "year", "month", "day")
-   */
-  period: Period;
-  /**
    * The configuration for the gate based on the gate type
    * Currently only supports "EVENTS_EMITTED"
    */
@@ -79,6 +71,14 @@ export interface EventsEmittedGateConfiguration {
    */
   criteria: Criteria[];
 
+  /**
+   * Number of periods to evaluate
+   */
+  evaluationPeriod: number;
+  /**
+   * Unit for periods (e.g. "year", "month", "day")
+   */
+  period: Period;
   /**
    * The number of matching events required to pass the gate
    */

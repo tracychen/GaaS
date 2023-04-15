@@ -53,7 +53,11 @@ export async function evaluateGate(
   if (gateConfiguration.addressArgument.indexed !== undefined) {
     topics.push(ethers.utils.hexZeroPad(address, 32));
   }
-  const endBlock = await convertPeriodToBlockRange(gate, provider);
+  const endBlock = await convertPeriodToBlockRange(
+    gateConfiguration.period,
+    gateConfiguration.evaluationPeriod,
+    provider
+  );
   const currentBlock = await provider.getBlockNumber();
   let toBlock = currentBlock;
   let fromBlock = Math.max(toBlock - 10000, endBlock);
@@ -116,12 +120,13 @@ function subtractSeconds(date: Date, seconds: number) {
 }
 
 async function convertPeriodToBlockRange(
-  gate: Gate,
+  period: Period,
+  evaluationPeriod: number,
   provider: providers.JsonRpcProvider
 ): Promise<number> {
   const dater = new EthDater(provider);
-  const periodSeconds = getSecondsFromPeriod(gate.period);
-  const secondsRange = periodSeconds * gate.evaluationPeriod;
+  const periodSeconds = getSecondsFromPeriod(period);
+  const secondsRange = periodSeconds * evaluationPeriod;
   const startDate = subtractSeconds(new Date(), secondsRange);
   const blockResult = await dater.getDate(startDate);
   return blockResult.block;
