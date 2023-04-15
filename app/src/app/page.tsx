@@ -19,8 +19,15 @@ import { Transition } from "@headlessui/react";
 import { useMemo, useState } from "react";
 import { useSignMessage } from "wagmi";
 
-export const verifyWalletMessage = () => {
-  return "GaaS";
+export const verifyWalletMessage = (address: string) => {
+  return `Welcome to GaaS!
+
+Sign this message to verify ownership of your wallet address.
+
+This request will not trigger a blockchain transaction or cost any gas fees.
+
+Your address: <WALLET_ADDRESS>
+  `.replace("<WALLET_ADDRESS>", address);
 };
 export enum GATE_TYPE {
   INTERACTION = "EVENTS_EMITTED",
@@ -364,6 +371,7 @@ const Home = () => {
                     createGate(
                       {
                         gate: {
+                          gateName: gateName,
                           gateType: selectedGate.type,
                           contractAddress: contractAddress,
                           chainId: selectedChain.chainId,
@@ -417,7 +425,7 @@ const Home = () => {
           onClick={async () => {
             if (address) {
               const response = await signMessageAsync({
-                message: verifyWalletMessage(),
+                message: verifyWalletMessage(address),
               });
               onSignatureSuccess(response);
             }
