@@ -16,7 +16,8 @@ import { queryABIFromDB } from "../planetscale";
 function getProvider(chainId: number) {
   const chainName = Object.keys(CHAIN_CONFIGS).find(
     (chain) => CHAIN_CONFIGS[chain].chainID === chainId
-  );
+  )!;
+  console.log(CHAIN_CONFIGS[chainName]);
 
   if (!chainName) {
     throw new Error(`Chain ID ${chainId} not supported`);
@@ -58,16 +59,17 @@ async function evaluateReadContractInfoGate(
     gate.gateConfiguration as ReadContractInfoGateConfiguration;
 
   const contract = new ethers.Contract(gate.contractAddress, abi, provider);
-  console.log({ contract });
   const callResult = await contract[gateConfiguration.method](address);
+  console.log({ callResult });
   let value = callResult;
   if (gateConfiguration.resultKey) {
     value = callResult[gateConfiguration.resultKey];
   }
-  if (value._isBigNumber) {
+  if (value._isBigNumber && gateConfiguration.method === "getApeCoinStake") {
     // TODO: handle other types, assume 18 decimals for now
     value = ethers.utils.formatEther(value);
   }
+  console.log({ value });
 
   const operator = gateConfiguration.comparison.operator;
   const comparisonValue = gateConfiguration.comparison.value;
@@ -108,18 +110,24 @@ async function evaluateEventsEmittedGate(
   let topics = [eventHexString];
 
   // If address to check is an indexed arg, add it to topics
-  if (gateConfiguration.addressArgument.indexed !== undefined) {
-    topics.push(ethers.utils.hexZeroPad(address, 32));
-  }
+  // if (gateConfiguration.addressArgument.indexed !== undefined) {
+  //   topics.push(ethers.utils.hexZeroPad(address, 32));
+  // }
   const endBlock = await convertPeriodToBlockRange(
     gateConfiguration.period,
     gateConfiguration.evaluationPeriod,
     provider
   );
 
+  let providerMaxBlockRange = 10000;
+  const { chainId } = await provider.getNetwork();
+  if (chainId == 137) {
+    providerMaxBlockRange = 1000;
+  }
+
   const currentBlock = await provider.getBlockNumber();
   let toBlock = currentBlock;
-  let fromBlock = Math.max(toBlock - 10000, endBlock);
+  let fromBlock = Math.max(toBlock - providerMaxBlockRange, endBlock);
   while (fromBlock >= endBlock) {
     const logs = await getLogs(
       topics,
@@ -151,7 +159,7 @@ async function evaluateEventsEmittedGate(
       break;
     }
     toBlock = fromBlock - 1;
-    fromBlock = Math.max(toBlock - 10000, endBlock);
+    fromBlock = Math.max(toBlock - providerMaxBlockRange, endBlock);
   }
 
   return false;
