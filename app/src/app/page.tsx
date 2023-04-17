@@ -675,11 +675,37 @@ const Home = () => {
     <>
       <div className="bg-gradient-to-r from-deform-orange to-deform-red h-[2000px] bg-cover">
         <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4">
+          <div className="flex min-h-full items-center justify-center p-4 flex-col gap-y-10">
             <div className="flex flex-wrap items-center justify-center">
               {!isSignatureVerified && <HomePage />}
               {isSignatureVerified && !showCreatedGate && <AddNewGate />}
               {showCreatedGate && <CreatedGate />}
+            </div>
+            <div
+              className={
+                "flex flex-col rounded-brand bg-white p-8 sm:w-[500px] items-center justify-center gap-y-2"
+              }
+            >
+              <div>
+                Created by the{" "}
+                <a
+                  href="https://deform.cc/"
+                  className="hover:underline"
+                  target="_blank"
+                >
+                  🫠 DeForm
+                </a>{" "}
+                team.
+              </div>
+              <div>
+                <a
+                  href="https://app.deform.cc/form/edfe4d05-3dcc-46e1-b397-47abe6df6363"
+                  className="font-bold hover:underline"
+                  target="_blank"
+                >
+                  Sign up for early access.
+                </a>
+              </div>
             </div>
           </div>
         </div>
